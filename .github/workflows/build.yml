@@ -1,0 +1,23 @@
+name: Build PC Control EXE
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - name: Install libraries
+      run: |
+        pip install customtkinter pycaw monitorcontrol pywin32 wmi pyinstaller comtypes
+    - name: Compile to EXE
+      run: |
+        pyinstaller --noconsole --onefile main.py
+    - name: Upload Finished EXE
+      uses: actions/upload-artifact@v4
+      with:
+        name: MyProgramEXE
+        path: dist/main.exe
